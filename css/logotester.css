@@ -1,0 +1,230 @@
+body {
+  font-family: sans-serif;
+  background-color: #fff;
+  overflow-x: hidden;
+  margin: 0;
+  width: 100%;
+  font-size: 16px;
+  overflow: hidden;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select:none;
+  user-select:none;
+  -o-user-select:none;
+
+}
+
+input {
+  z-index: 5000 !important
+}
+
+
+.tools {
+  display: -ms-grid;
+  width: 100%;
+  display: grid;
+  position: absolute;
+  bottom: 0px;
+  height: 60px;
+  color: #000;
+  background-color: #fff;
+  -ms-grid-rows: (30%)[4];
+  grid-template-rows: repeat(8,30%);
+  -ms-grid-columns: (1fr)[4];
+  grid-template-columns: repeat(4, 1fr);
+  z-index: 2000 !important;
+}
+
+.tool {
+  font-size: 16px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  min-height: 2.4rem;
+  text-align:center;
+  padding: .75rem;
+  border-radius: .2rem;
+
+}
+
+#tools {
+  position: fixed;
+  width: 100%;
+  bottom: 0px;
+  height: 60px;
+  background-color: #fff;
+  z-index: 2000 !important;
+  color: #fff;
+}
+
+canvas {
+  z-index: 10 !important;
+}
+
+canvas:active {
+  cursor: grabbing;
+}
+
+
+#tools-disabler {
+  height: 60px;
+  background-color: rgba(255, 255, 255, 0.8);
+  bottom: 0px;
+  width: 50%;
+  position: absolute;
+  z-index: 3000 !important;
+}
+
+#canvas-disabler {
+  height: 95%;
+  width: 100%;
+  position: absolute;
+  z-index: 1000 !important;
+}
+
+#canvas-emptyState img {
+	    position: absolute;
+	    margin: auto;
+	    top: 0;
+	    left: 0;
+	    right: 0;
+	    bottom: 0;
+	    width: 84px;
+	    opacity: 0.5;
+	}
+
+  /*
+  -----------------------------------------------------------------------
+  Slider
+  */
+
+ .sliders {
+    display: inline-block;
+    white-space: nowrap;
+    float: left;
+  }
+
+  .range-slider {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    white-space: nowrap;
+  }
+
+  .range-slider span {
+    color: #000;
+    margin-right: 15px;
+    width: 24px;
+    display: inline-block;
+  }
+
+
+  input.slider {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 1px;
+      display: inline-block;
+      outline: none;
+      background: #fff;
+      border: 0.5px solid #000;
+      width: 100%;
+  }
+
+
+  .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      border: 1px solid #000;
+      cursor: grab;
+  }
+
+  .slider::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      border: 1px solid #000;
+      cursor: grab;
+      appearance: none;
+  }
+
+  .slider::-webkit-slider-thumb:hover, .slider::-moz-range-thumb:hover {
+      background: #000;
+  }
+
+  .slider.size {
+   -webkit-transform: rotateY(180deg);
+   -moz-transform: rotateY(180deg);
+   -ms-transform: rotateY(180deg);
+   -o-transform: rotateY(180deg);
+   transform: rotateY(180deg);
+  }
+
+  /*
+  -----------------------------------------------------------------------
+  Buttons
+  */
+
+
+  #buttons {
+    display: inline-block;
+    white-space: nowrap;
+    width: 50%;
+    float: right;
+    z-index: 2000 !important;
+  }
+
+  .button, .custom-file-upload {
+    background-color: #fff;
+    border: 1px solid #000;
+    color: #000;
+    cursor: pointer;
+    padding: 4px;
+    text-align: center;
+    outline: none;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 3px;
+    width: 100%;
+    min-width: 160px;
+  }
+
+  .button.disabled {
+    background-color: #fff;
+    border: 1px solid #cacaca;
+    color: #cacaca;
+    cursor: default;
+  }
+
+  input[type="file"] {
+      display: none;
+  }
+
+
+
+@media only screen and (max-width: 800px) {
+  .tools {
+    -ms-grid-rows: (100%)[4];
+    grid-template-rows: repeat(4, 80%);
+    -ms-grid-columns: (1fr)[1];
+    grid-template-columns: repeat(1, 1fr);
+    padding-bottom: 20px;
+    bottom: 128px;
+  }
+  #tools-disabler {
+    height: 100px;
+    background-color: rgba(255, 255, 255, 0.8);
+    bottom: 100px;
+    width: 100%;
+    position: absolute;
+    z-index: 5000 !important;
+  }
+}

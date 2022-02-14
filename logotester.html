@@ -1,0 +1,201 @@
+	<html lang="ru" xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	  <title>Logotester</title>
+	  <link rel="stylesheet" type="text/css" href="css/logotester.css" />
+		<link rel="shortcut icon" href="/favicon.ico">
+	  <!-- Google Tag Manager -->
+		<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+		new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+		j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+		'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+		})(window,document,'script','dataLayer','GTM-W38HVKJ');</script>
+		<!-- End Google Tag Manager -->
+		<script src="js/jquery.min.js"></script>
+		<script src="js/threejs/three.min.js"></script>
+		<script src="js/threejs/OrbitControls.js"></script>
+	  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-120052382-3"></script>
+	  <script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-120052382-3');
+	  </script>
+	</head>
+	<body>
+	  <!-- Google Tag Manager (noscript) -->
+	<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W38HVKJ"
+	height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	<!-- End Google Tag Manager (noscript)-->
+
+	<div id="canvas-emptyState">
+		<img src="images/upload-image-empty.svg">
+	</div>
+	<div id="tools-disabler"></div>
+	<div class="tools">
+		<div class="tool">
+			<div class="range-slider">
+				<span>Blur</span>
+				<input class="slider blur" type="range" min="0" max="5" step=".1" oninput=" changeBlur(event)" value="0"/>
+			</div>
+		</div>
+		<div class="tool">
+			<div class="range-slider">
+				<span>Size</span>
+				<input class="slider size" type="range" min="2500" max="9000" value="2500" step="1" oninput=" changeSize(event)" />
+			</div>
+		</div>
+		<div class="tool">
+			<button id="button" class="button disabled reset" onclick="resetControls(); resetSliders();">Reset</button>
+		</div>
+		<div class="tool">
+			<label for="userImage" class="custom-file-upload">Upload an image</label>
+			<input id="userImage" type="file" class="custom-file-input" />
+		</div>
+	</div>
+
+	<div id="canvas-disabler"></div>
+	<div id="render"></div>
+
+
+
+
+<script>
+			/******************************* variables *******************/
+			//Preparamos el render
+			var Render=new THREE.WebGLRenderer();
+			//El escenario
+			var Escenario=new THREE.Scene();
+			// la Figura
+			var Figura;
+			var controls;
+			var Ancho=window.innerWidth;
+			var Alto=window.innerHeight;
+			var Angulo = 45;
+			var Aspecto=Ancho/Alto;
+			var cerca=0.1;
+			var lejos=10000;
+			//La c�mara
+			var Camara=new THREE.PerspectiveCamera(Angulo,Aspecto,cerca,lejos);
+			/******************************* inicio *******************/
+			function inicio(){
+					//Tama�o del render(resultado)
+					Render.setSize(Ancho,Alto);
+					//Se agrega el render al documento html
+					document.getElementById('render').appendChild(Render.domElement);
+					//Acercamos la c�mara en z es profundidad para ver el punto
+					Camara.position.set( 0, 0, 2500 );
+					Camara.rotation.set( 0, 0, 0 );
+					Camara.position.z = 2500;
+					//agregando la c�mara al escenario
+					Escenario.add(Camara);
+					// Territorio
+					crear_plano();
+
+					// agregamos todo el escenario y la c�mara al render
+					controls=new THREE.OrbitControls(Camara,Render.domElement);
+					controls.noZoom = true;
+					window.addEventListener( 'resize', onWindowResize, false );
+
+					function onWindowResize(){
+
+						Camara.aspect = window.innerWidth / window.innerHeight;
+						Camara.updateProjectionMatrix();
+
+						Render.setSize( window.innerWidth, window.innerHeight );
+
+					}
+
+
+			}
+
+			function resetControls() {
+				Camara.position.set( 0, 0, 2500 );
+				Camara.rotation.set( 0, 0, 0 );
+			}
+
+
+			function crear_plano(){
+					//Geometr�a del plano
+					Geometria_plano=new THREE.PlaneGeometry(1,1);
+					//Textura
+					Textura_plano=new THREE.ImageUtils.loadTexture("cesped.jpg");
+					Textura_plano.wrapS=Textura_plano.wrapT=THREE.RepeatWrapping;
+
+
+					// Material y agregado la textura
+					Material_plano=new THREE.MeshBasicMaterial({map:Textura_plano,side:THREE.DoubleSide});
+					// El plano (Territorio)
+					Territorio=new THREE.Mesh(Geometria_plano,Material_plano);
+					Territorio.rotation.y=0;
+					Territorio.rotation.x=0;
+					Territorio.scale.x=Textura_plano.width;
+					Territorio.scale.y=Textura_plano.height;
+					Escenario.add(Territorio);
+			}
+			function animacion(){
+					requestAnimationFrame(animacion);
+					render_modelo();
+			}
+			function render_modelo(){
+					controls.update();
+
+					Render.render(Escenario,Camara);
+			}
+			/**************************llamado a las funciones ******************/
+			// load function
+
+
+
+
+
+			// Image uploader
+			$("#userImage").change(function () {
+    var image = document.createElement( 'img' );
+
+    var texture = new THREE.Texture( image );
+
+    image.onload = function()  {
+        texture.needsUpdate = true;
+				Territorio.scale.x=image.width;
+				Territorio.scale.y=image.height;
+    };
+
+    userImage = $("#userImage")[0];
+    if (userImage.files && userImage.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            image.src = e.target.result;
+						Territorio.material.map=new THREE.ImageUtils.loadTexture( e.target.result );
+						document.getElementById("button").classList.remove("disabled");
+						document.getElementById("canvas-disabler").remove();
+						document.getElementById("tools-disabler").remove();
+						document.getElementById("canvas-emptyState").remove();
+        };
+
+        reader.readAsDataURL(userImage.files[0]);
+
+    }
+
+
+});
+
+
+
+			inicio();
+			animacion();
+	</script>
+	<script src="js/slider.js"></script>
+	<script>
+function resetSliders() {
+	var renderBlur = document.querySelector("#render");
+	renderBlur.setAttribute("style", `filter: blur(0px)`);
+	$('input.slider.blur').val(0);
+	$('input.slider.size').val(2500);
+}
+</script>
+<script type="text/javascript">
+
+</script>
+	</body>
+</html>
